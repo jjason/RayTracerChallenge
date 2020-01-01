@@ -53,3 +53,6 @@ class Tuple:
                      self.y / scalar,
                      self.z / scalar,
                      self.w / scalar)
+
+    def __str__(self):
+        return "x={}, y={}, z={}, w={}".format(self.x, self.y, self.z, self.w)
