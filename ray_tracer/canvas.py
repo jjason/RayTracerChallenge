@@ -40,7 +40,7 @@ class Canvas:
                                   green=color.green)
 
     def to_ppm(self):
-        header = "P3\n{} {}\n255\n".format(self.width, self.height)
+        header = "P3\n{} {}\n255".format(self.width, self.height)
 
         # Walk through each row and convert the colors to a line of text of
         # 3-tuples with spaces between values and a newline at the end of each
