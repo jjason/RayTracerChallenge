@@ -7,27 +7,43 @@ class Canvas:
         if height <= 0:
             raise ValueError("Height must be greater than 0")
 
-        self.width = width
-        self.height = height
+        self._width = width
+        self._height = height
 
         # A canvas will be a list, with height lists, each with width Color
         # objects to represent the color at a particular pixel.  So, later
         # when accessing the lists, the y coordinate will represent the first
         # dimension and the x coordinate the second dimension
-        self.canvas = [[Color(red=0, blue=0, green=0) for _ in range(width)]
-                       for _ in range(height)]
+        self._canvas = [[Color(red=0, blue=0, green=0) for _ in range(width)]
+                        for _ in range(height)]
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        self._width = value
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = height
 
     def _validate_coordinates(self, x=0, y=0):
-        if x < 0 or x >= self.width:
+        if x < 0 or x >= self._width:
             raise ValueError("X coordinate is out of bounds")
 
-        if y < 0 or y >= self.height:
+        if y < 0 or y >= self._height:
             raise ValueError("Y coordinate is out of bounds")
 
     def get_pixel(self, x=0, y=0):
         self._validate_coordinates(x=x, y=y)
 
-        return self.canvas[y][x]
+        return self._canvas[y][x]
 
     def set_pixel(self, x=0, y=0, color=Color()):
         self._validate_coordinates(x=x, y=y)
@@ -35,21 +51,21 @@ class Canvas:
         # When inserting, we are going to create a new color object as storing
         # the reference provided would be bad if the caller modifies the
         # referenced color object
-        self.canvas[y][x] = Color(red=color.red,
-                                  blue=color.blue,
-                                  green=color.green)
+        self._canvas[y][x] = Color(red=color.red,
+                                   blue=color.blue,
+                                   green=color.green)
 
     def to_ppm(self):
-        header = "P3\n{} {}\n255".format(self.width, self.height)
+        header = "P3\n{} {}\n255".format(self._width, self._height)
 
         # Walk through each row and convert the colors to a line of text of
         # 3-tuples with spaces between values and a newline at the end of each
         # row.  Limit line length, not including newline, to 70 characters
         pixel_text = []
-        for y in range(self.height):
+        for y in range(self._height):
             y_text = []
-            for x in range(self.width):
-                y_text.append("{}".format(self.canvas[y][x]))
+            for x in range(self._width):
+                y_text.append("{}".format(self._canvas[y][x]))
             y_text = " ".join(y_text)
 
             # If the line is 70 or fewer characters in length, then just append
