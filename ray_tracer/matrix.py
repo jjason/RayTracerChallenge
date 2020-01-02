@@ -1,4 +1,5 @@
 import copy
+import math
 
 from tuple import Tuple
 from util import Utilities
@@ -26,6 +27,125 @@ class Matrix:
          for dimension in range(dimensions)]
 
         return matrix
+
+    @staticmethod
+    def translate_transform(x=0, y=0, z=0):
+        # Translation matrix is:
+        # | 1 0 0 x |
+        # | 0 1 0 y |
+        # | 0 0 1 z |
+        # | 0 0 0 1 |
+
+        m = Matrix.identity(dimensions=4)
+        m.set_item(row=0, column=3, value=x)
+        m.set_item(row=1, column=3, value=y)
+        m.set_item(row=2, column=3, value=z)
+
+        return m
+
+    @staticmethod
+    def scale_transform(x=1, y=1, z=1):
+        # Scaling matrix is:
+        # | x 0 0 0 |
+        # | 0 y 0 0 |
+        # | 0 0 z 0 |
+        # | 0 0 0 1 |
+
+        m = Matrix(rows=4, columns=4)
+        m.set_item(row=0, column=0, value=x)
+        m.set_item(row=1, column=1, value=y)
+        m.set_item(row=2, column=2, value=z)
+        m.set_item(row=3, column=3, value=1.0)
+
+        return m
+
+    @staticmethod
+    def rotate_x_transform(radians=0):
+        # Rotation around x axis is:
+        # |    1       0       0       0    |
+        # |    0     cos(r) -sin(r)    0    |
+        # |    0     sin(r)  cos(r)    0    |
+        # |    0       0       0       1    |
+
+        cosine = math.cos(radians)
+        sine = math.sin(radians)
+
+        m = Matrix(rows=4, columns=4)
+        m.set_item(row=0, column=0, value=1.0)
+        m.set_item(row=1, column=1, value=cosine)
+        m.set_item(row=1, column=2, value=-sine)
+        m.set_item(row=2, column=1, value=sine)
+        m.set_item(row=2, column=2, value=cosine)
+        m.set_item(row=3, column=3, value=1.0)
+
+        return m
+
+    @staticmethod
+    def rotate_y_transform(radians=0):
+        # Rotation around y axis is:
+        # |  cos(r)    0     sin(r)    0    |
+        # |    0       1       0       0    |
+        # | -sin(r)    0     cos(r)    0    |
+        # |    0       0       0       1    |
+
+        cosine = math.cos(radians)
+        sine = math.sin(radians)
+
+        m = Matrix(rows=4, columns=4)
+        m.set_item(row=0, column=0, value=cosine)
+        m.set_item(row=0, column=2, value=sine)
+        m.set_item(row=1, column=1, value=1.0)
+        m.set_item(row=2, column=0, value=-sine)
+        m.set_item(row=2, column=2, value=cosine)
+        m.set_item(row=3, column=3, value=1.0)
+
+        return m
+
+    @staticmethod
+    def rotate_z_transform(radians=0):
+        # Rotation around z matrix is:
+        # |  cos(r) -sin(r)    0       0    |
+        # |  sin(r)  cos(r)    0       0    |
+        # |    0       0       1       0    |
+        # |    0       0       0       1    |
+
+        cosine = math.cos(radians)
+        sine = math.sin(radians)
+
+        m = Matrix(rows=4, columns=4)
+        m.set_item(row=0, column=0, value=cosine)
+        m.set_item(row=0, column=1, value=-sine)
+        m.set_item(row=1, column=0, value=sine)
+        m.set_item(row=1, column=1, value=cosine)
+        m.set_item(row=2, column=2, value=1.0)
+        m.set_item(row=3, column=3, value=1.0)
+
+        return m
+
+    @staticmethod
+    def shear_transform(x_moved_in_proportion_to_y=0,
+                        x_moved_in_proportion_to_z=0,
+                        y_moved_in_proportion_to_x=0,
+                        y_moved_in_proportion_to_z=0,
+                        z_moved_in_proportion_to_x=0,
+                        z_moved_in_proportion_to_y=0):
+        # Shearing matrix is:
+        # |   1   x(y) x(z)  0   |
+        # |  y(x)  1   y(z)  0   |
+        # |  z(x) z(y)  1    0   |
+        # |   0    0    0    1   |
+        #
+        # Where x(y) is x_moved_in_proportion_to_y, etc.
+
+        m = Matrix.identity(dimensions=4)
+        m.set_item(row=0, column=1, value=x_moved_in_proportion_to_y)
+        m.set_item(row=0, column=2, value=x_moved_in_proportion_to_z)
+        m.set_item(row=1, column=0, value=y_moved_in_proportion_to_x)
+        m.set_item(row=1, column=2, value=y_moved_in_proportion_to_z)
+        m.set_item(row=2, column=0, value=z_moved_in_proportion_to_x)
+        m.set_item(row=2, column=1, value=z_moved_in_proportion_to_y)
+
+        return m
 
     @property
     def rows(self):
@@ -211,3 +331,35 @@ class Matrix:
                                  value=self.cofactor(row=row, column=column) / determinant)
 
         return inverse
+
+    def translate(self, x=0, y=0, z=0):
+        return Matrix.translate_transform(x=x, y=y, z=z) * self
+
+    def scale(self, x=1, y=1, z=1):
+        return Matrix.scale_transform(x=x, y=y, z=z) * self
+
+    def rotate_x(self, radians=0):
+        return Matrix.rotate_x_transform(radians=radians) * self
+
+    def rotate_y(self, radians=0):
+        return Matrix.rotate_y_transform(radians=radians) * self
+
+    def rotate_z(self, radians=0):
+        return Matrix.rotate_z_transform(radians=radians) * self
+
+    def shear(self,
+              x_moved_in_proportion_to_y=0,
+              x_moved_in_proportion_to_z=0,
+              y_moved_in_proportion_to_x=0,
+              y_moved_in_proportion_to_z=0,
+              z_moved_in_proportion_to_x=0,
+              z_moved_in_proportion_to_y=0):
+        return \
+            Matrix.shear_transform(x_moved_in_proportion_to_y=x_moved_in_proportion_to_y,
+                                   x_moved_in_proportion_to_z=x_moved_in_proportion_to_z,
+                                   y_moved_in_proportion_to_x=y_moved_in_proportion_to_x,
+                                   y_moved_in_proportion_to_z=y_moved_in_proportion_to_z,
+                                   z_moved_in_proportion_to_x=z_moved_in_proportion_to_x,
+                                   z_moved_in_proportion_to_y=z_moved_in_proportion_to_y) * \
+            self
+
