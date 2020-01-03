@@ -26,5 +26,5 @@ for time in range(12):
     print("{} = {}".format(time, point))
     canvas.set_pixel(x=int(point.x), y=400 - int(point.y), color=red)
 
-with open("clock.ppm", "w") as file:
+with open("chapter_4.ppm", "w") as file:
     file.write(canvas.to_ppm())

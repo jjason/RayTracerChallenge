@@ -66,5 +66,5 @@ for y in range(canvas_pixels):
         if sphere.intersect(ray=ray).hit() is not None:
             canvas.set_pixel(x=x, y=y, color=red)
 
-with open("cast_rays_at_sphere.ppm", "w") as file:
+with open("chapter_5.ppm", "w") as file:
     file.write(canvas.to_ppm())

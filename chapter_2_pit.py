@@ -36,5 +36,5 @@ while projectile.position.y >= 0:
     canvas.set_pixel(x=x, y=y, color=red)
     projectile.tick(environment)
 
-with open("projectile.ppm", "w") as file:
+with open("chapter_2.ppm", "w") as file:
     file.write(canvas.to_ppm())
