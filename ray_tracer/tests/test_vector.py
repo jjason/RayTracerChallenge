@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from math import sqrt
@@ -5,6 +6,7 @@ from point import Point
 from tuple import Tuple
 from util import Utilities
 from vector import Vector
+
 
 class TestVector(unittest.TestCase):
     def test_create(self):
@@ -74,6 +76,18 @@ class TestVector(unittest.TestCase):
     def test_cross_product_with_point(self):
         with self.assertRaises(NotImplementedError):
             Vector().cross_product(Point())
+
+    def test_reflect_flat_surface(self):
+        v = Vector(x=1, y=-1, z=0)
+        n = Vector(x=0, y=1, z=0)
+        r = v.reflect(normal=n)
+        self.assertEqual(r, Vector(x=1, y=1, z=0))
+
+    def test_reflect_slanted_surface(self):
+        v = Vector(0, -1, 0)
+        n = Vector(x=math.sqrt(2)/2, y=math.sqrt(2)/2, z=0)
+        r = v.reflect(normal=n)
+        self.assertEqual(r, Vector(x=1, y=0, z=0))
 
 
 if __name__ == '__main__':

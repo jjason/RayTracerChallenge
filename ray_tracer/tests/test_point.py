@@ -67,6 +67,9 @@ class TestPoint(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             Point().cross_product(Vector())
 
+    def test_reflect(self):
+        with self.assertRaises(NotImplementedError):
+            Point().reflect(Vector())
 
 
 if __name__ == '__main__':

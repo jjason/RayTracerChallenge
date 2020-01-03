@@ -120,3 +120,9 @@ class Tuple:
                      y=self._z * rhs._x - self._x * rhs._z,
                      z=self._x * rhs._y - self._y * rhs._x,
                      w=0.0)
+
+    def reflect(self, normal):
+        if not self.is_vector():
+            raise NotImplementedError("Only vectors can be reflected")
+
+        return self - normal * 2 * self.dot_product(normal)
