@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from ray_tracer.canvas import Canvas
 from ray_tracer.color import Color
 from ray_tracer.point import Point
