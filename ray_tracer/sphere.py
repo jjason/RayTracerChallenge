@@ -110,9 +110,9 @@ class Sphere:
 
         # Compute the a, b, and c coefficients for the quadratic equation
         # described above:
-        a = Vector.dot_product(ray.direction, ray.direction)
-        b = 2 * Vector.dot_product(ray.direction, sphere_to_ray)
-        c = Vector.dot_product(sphere_to_ray, sphere_to_ray) - self._radius**2
+        a = ray.direction.dot_product(ray.direction)
+        b = 2 * ray.direction.dot_product(sphere_to_ray)
+        c = sphere_to_ray.dot_product(sphere_to_ray) - self._radius**2
 
         # Now compute the discriminant to determine if we even have solutions.
         discriminant = b**2 - 4 * a * c

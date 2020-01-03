@@ -43,5 +43,31 @@ class TestPoint(unittest.TestCase):
         self.assertTrue(p2.is_point())
         self.assertEqual(p2, Point(-2, -4, -6))
 
+    def test_magnitude(self):
+        with self.assertRaises(NotImplementedError):
+            Point().magnitude()
+
+    def test_normalize(self):
+        with self.assertRaises(NotImplementedError):
+            Point().normalize()
+
+    def test_dot_product_with_point(self):
+        with self.assertRaises(NotImplementedError):
+            Point().dot_product(Point())
+
+    def test_dot_product_with_vector(self):
+        with self.assertRaises(NotImplementedError):
+            Point().dot_product(Vector())
+
+    def test_cross_product_with_point(self):
+        with self.assertRaises(NotImplementedError):
+            Point().cross_product(Point())
+
+    def test_cross_product_with_vector(self):
+        with self.assertRaises(NotImplementedError):
+            Point().cross_product(Vector())
+
+
+
 if __name__ == '__main__':
     unittest.main()

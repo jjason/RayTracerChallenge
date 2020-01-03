@@ -59,18 +59,7 @@ for y in range(canvas_pixels):
         wall_position = Point(x=world_x, y=world_y, z=wall_z)
         direction = wall_position - ray_origin
 
-        # NOTE - may need to go back and fix this.  At the time, because only
-        # vectors had magnitude and could be normalized those methods were
-        # defined on the Vector class and not Tuple.  That _may_ still be the
-        # right thing to do.  It may be that what should happen in the tuple
-        # class is when an arithmetic operation is performed on a tuple, the
-        # correct subclass is instantiated.  For now, we are going to manually
-        # create a Vector from the tuple.
-        direction = Vector.normalize(Vector(x=direction.x,
-                                            y=direction.y,
-                                            z=direction.z))
-
-        ray = Ray(origin=ray_origin, direction=direction)
+        ray = Ray(origin=ray_origin, direction=direction.normalize())
 
         # If the ray intersects the sphere, then the x, y coordinate is to be
         # colored red
