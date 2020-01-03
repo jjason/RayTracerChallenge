@@ -137,10 +137,10 @@ class Sphere:
 
         return Intersections(i1, i2)
 
-    def normal_at(self, point=Point()):
+    def normal_at(self, position=Point()):
         inverse_transform = self._transform.inverse()
 
-        object_point = inverse_transform * point
+        object_point = inverse_transform * position
         object_normal = object_point - Point(x=0, y=0, z=0)
 
         normal = inverse_transform.transpose() * object_normal
