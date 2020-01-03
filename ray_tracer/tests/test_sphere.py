@@ -58,7 +58,7 @@ class TestSphere(unittest.TestCase):
 
     def test_intersect_scaled(self):
         r = Ray(origin=Point(x=0, y=0, z=-5), direction=Vector(x=0, y=0, z=1))
-        self._sphere.transform = Matrix.scale_transform(x=2, y=2, z=2)
+        self._sphere.transform = Matrix.scaling_transform(x=2, y=2, z=2)
         i = self._sphere.intersect(ray=r)
         self.assertEqual(i.count, 2)
         self.assertTrue(Utilities.equal(i[0].time, 3))
@@ -66,7 +66,7 @@ class TestSphere(unittest.TestCase):
 
     def test_intersect_translated(self):
         r = Ray(origin=Point(x=0, y=0, z=-5), direction=Vector(x=0, y=0, z=1))
-        self._sphere.transform = Matrix.translate_transform(x=5, y=0, z=0)
+        self._sphere.transform = Matrix.translation_transform(x=5, y=0, z=0)
         i = self._sphere.intersect(ray=r)
         self.assertEqual(i.count, 0)
 
@@ -74,7 +74,7 @@ class TestSphere(unittest.TestCase):
         self.assertEqual(self._sphere.transform, Matrix.identity())
 
     def test_transform_set(self):
-        t = Matrix.translate_transform(x=2, y=3, z=4)
+        t = Matrix.translation_transform(x=2, y=3, z=4)
         self._sphere.transform = t
         self.assertEqual(self._sphere.transform, t)
 

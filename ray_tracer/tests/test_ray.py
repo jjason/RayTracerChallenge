@@ -31,7 +31,7 @@ class TestRay(unittest.TestCase):
 
     def test_transform_by_translation(self):
         r1 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=0))
-        m = Matrix.translate_transform(x=3, y=4, z=5)
+        m = Matrix.translation_transform(x=3, y=4, z=5)
         r2 = r1.transform(transformation=m)
         self.assertIsNot(r1, r2)
         self.assertEqual(r2.origin, Point(x=4, y=6, z=8))
@@ -39,7 +39,7 @@ class TestRay(unittest.TestCase):
 
     def test_transform_by_scaling(self):
         r1 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=0))
-        m = Matrix.scale_transform(x=2, y=3, z=4)
+        m = Matrix.scaling_transform(x=2, y=3, z=4)
         r2 = r1.transform(transformation=m)
         self.assertIsNot(r1, r2)
         self.assertEqual(r2.origin, Point(x=2, y=6, z=12))
