@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import math
 
 from ray_tracer.canvas import Canvas

@@ -29,7 +29,7 @@ class Matrix:
         return matrix
 
     @staticmethod
-    def translate_transform(x=0, y=0, z=0):
+    def translation_transform(x=0, y=0, z=0):
         # Translation matrix is:
         # | 1 0 0 x |
         # | 0 1 0 y |
@@ -44,7 +44,7 @@ class Matrix:
         return m
 
     @staticmethod
-    def scale_transform(x=1, y=1, z=1):
+    def scaling_transform(x=1, y=1, z=1):
         # Scaling matrix is:
         # | x 0 0 0 |
         # | 0 y 0 0 |
@@ -60,7 +60,7 @@ class Matrix:
         return m
 
     @staticmethod
-    def rotate_x_transform(radians=0):
+    def rotation_x_transform(radians=0):
         # Rotation around x axis is:
         # |    1       0       0       0    |
         # |    0     cos(r) -sin(r)    0    |
@@ -81,7 +81,7 @@ class Matrix:
         return m
 
     @staticmethod
-    def rotate_y_transform(radians=0):
+    def rotation_y_transform(radians=0):
         # Rotation around y axis is:
         # |  cos(r)    0     sin(r)    0    |
         # |    0       1       0       0    |
@@ -102,7 +102,7 @@ class Matrix:
         return m
 
     @staticmethod
-    def rotate_z_transform(radians=0):
+    def rotation_z_transform(radians=0):
         # Rotation around z matrix is:
         # |  cos(r) -sin(r)    0       0    |
         # |  sin(r)  cos(r)    0       0    |
@@ -123,12 +123,12 @@ class Matrix:
         return m
 
     @staticmethod
-    def shear_transform(x_moved_in_proportion_to_y=0,
-                        x_moved_in_proportion_to_z=0,
-                        y_moved_in_proportion_to_x=0,
-                        y_moved_in_proportion_to_z=0,
-                        z_moved_in_proportion_to_x=0,
-                        z_moved_in_proportion_to_y=0):
+    def shearing_transform(x_moved_in_proportion_to_y=0,
+                           x_moved_in_proportion_to_z=0,
+                           y_moved_in_proportion_to_x=0,
+                           y_moved_in_proportion_to_z=0,
+                           z_moved_in_proportion_to_x=0,
+                           z_moved_in_proportion_to_y=0):
         # Shearing matrix is:
         # |   1   x(y) x(z)  0   |
         # |  y(x)  1   y(z)  0   |
@@ -333,19 +333,19 @@ class Matrix:
         return inverse
 
     def translate(self, x=0, y=0, z=0):
-        return Matrix.translate_transform(x=x, y=y, z=z) * self
+        return Matrix.translation_transform(x=x, y=y, z=z) * self
 
     def scale(self, x=1, y=1, z=1):
-        return Matrix.scale_transform(x=x, y=y, z=z) * self
+        return Matrix.scaling_transform(x=x, y=y, z=z) * self
 
     def rotate_x(self, radians=0):
-        return Matrix.rotate_x_transform(radians=radians) * self
+        return Matrix.rotation_x_transform(radians=radians) * self
 
     def rotate_y(self, radians=0):
-        return Matrix.rotate_y_transform(radians=radians) * self
+        return Matrix.rotation_y_transform(radians=radians) * self
 
     def rotate_z(self, radians=0):
-        return Matrix.rotate_z_transform(radians=radians) * self
+        return Matrix.rotation_z_transform(radians=radians) * self
 
     def shear(self,
               x_moved_in_proportion_to_y=0,
@@ -355,11 +355,11 @@ class Matrix:
               z_moved_in_proportion_to_x=0,
               z_moved_in_proportion_to_y=0):
         return \
-            Matrix.shear_transform(x_moved_in_proportion_to_y=x_moved_in_proportion_to_y,
-                                   x_moved_in_proportion_to_z=x_moved_in_proportion_to_z,
-                                   y_moved_in_proportion_to_x=y_moved_in_proportion_to_x,
-                                   y_moved_in_proportion_to_z=y_moved_in_proportion_to_z,
-                                   z_moved_in_proportion_to_x=z_moved_in_proportion_to_x,
-                                   z_moved_in_proportion_to_y=z_moved_in_proportion_to_y) * \
+            Matrix.shearing_transform(x_moved_in_proportion_to_y=x_moved_in_proportion_to_y,
+                                      x_moved_in_proportion_to_z=x_moved_in_proportion_to_z,
+                                      y_moved_in_proportion_to_x=y_moved_in_proportion_to_x,
+                                      y_moved_in_proportion_to_z=y_moved_in_proportion_to_z,
+                                      z_moved_in_proportion_to_x=z_moved_in_proportion_to_x,
+                                      z_moved_in_proportion_to_y=z_moved_in_proportion_to_y) * \
             self
 

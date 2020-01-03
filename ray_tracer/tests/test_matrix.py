@@ -356,107 +356,107 @@ class TestMatrix(unittest.TestCase):
         self.assertEqual(m3 * m2.inverse(), m1)
 
     def test_translate_point(self):
-        m = Matrix.translate_transform(x=5, y=-3, z=2)
+        m = Matrix.translation_transform(x=5, y=-3, z=2)
         p = Point(x=-3, y=4, z=5)
         self.assertEqual(m * p, Point(x=2, y=1, z=7))
 
     def test_inverse_translate_point(self):
-        m = Matrix.translate_transform(x=5, y=-3, z=2)
+        m = Matrix.translation_transform(x=5, y=-3, z=2)
         i = m.inverse()
         p = Point(x=-3, y=4, z=5)
         self.assertEqual(i * p, Point(-8, 7, 3))
 
     def test_translate_vector(self):
-        m = Matrix.translate_transform(x=5, y=-3, z=2)
+        m = Matrix.translation_transform(x=5, y=-3, z=2)
         v = Vector(-3, 4, 5)
         self.assertEqual(m * v, v)
 
     def test_scale_point(self):
-        m = Matrix.scale_transform(x=2, y=3, z=4)
+        m = Matrix.scaling_transform(x=2, y=3, z=4)
         p = Point(x=-4, y=6, z=8)
         self.assertEqual(m * p, Point(x=-8, y=18, z=32))
 
     def test_scale_vector(self):
-        m = Matrix.scale_transform(x=2, y=3, z=4)
+        m = Matrix.scaling_transform(x=2, y=3, z=4)
         v = Vector(x=-4, y=6, z=8)
         self.assertEqual(m * v, Vector(-8, 18, 32))
 
     def test_invser_scale_vector(self):
-        m = Matrix.scale_transform(x=2, y=3, z=4)
+        m = Matrix.scaling_transform(x=2, y=3, z=4)
         i = m.inverse()
         v = Vector(x=-4, y=6, z=8)
         self.assertEqual(i * v, Vector(x=-2, y=2, z=2))
 
     def test_reflect_point_using_scale(self):
-        m = Matrix.scale_transform(x=-1, y=1, z=1)
+        m = Matrix.scaling_transform(x=-1, y=1, z=1)
         p = Point(x=2, y=3, z=4)
         self.assertEqual(m * p, Point(x=-2, y=3, z=4))
 
     def test_rotate_point_around_x_axis(self):
         p = Point(x=0, y=1, z=0)
-        e = Matrix.rotate_x_transform(radians=math.pi/4)
-        q = Matrix.rotate_x_transform(radians=math.pi/2)
+        e = Matrix.rotation_x_transform(radians=math.pi/4)
+        q = Matrix.rotation_x_transform(radians=math.pi/2)
         self.assertEqual(e * p, Point(x=0, y=math.sqrt(2)/2, z=math.sqrt(2)/2))
         self.assertEqual(q * p, Point(x=0, y=0, z=1))
 
     def test_inverse_rotate_point_around_x_axis(self):
         p = Point(x=0, y=1, z=0)
-        e = Matrix.rotate_x_transform(radians=math.pi/4)
+        e = Matrix.rotation_x_transform(radians=math.pi/4)
         i = e.inverse()
         self.assertEqual(i * p, Point(x=0, y=math.sqrt(2)/2, z=-math.sqrt(2)/2))
 
     def test_rotate_point_around_y_axis(self):
         p = Point(x=0, y=0, z=1)
-        e = Matrix.rotate_y_transform(radians=math.pi/4)
-        q = Matrix.rotate_y_transform(radians=math.pi/2)
+        e = Matrix.rotation_y_transform(radians=math.pi/4)
+        q = Matrix.rotation_y_transform(radians=math.pi/2)
         self.assertEqual(e * p, Point(x=math.sqrt(2)/2, y=0, z=math.sqrt(2)/2))
         self.assertEqual(q * p, Point(x=1, y=0, z=0))
 
     def test_rotate_point_around_z_axis(self):
         p = Point(x=0, y=1, z=0)
-        e = Matrix.rotate_z_transform(radians=math.pi/4)
-        q = Matrix.rotate_z_transform(radians=math.pi/2)
+        e = Matrix.rotation_z_transform(radians=math.pi/4)
+        q = Matrix.rotation_z_transform(radians=math.pi/2)
         self.assertEqual(e * p, Point(x=-math.sqrt(2)/2, y=math.sqrt(2)/2, z=0))
         self.assertEqual(q * p, Point(x=-1, y=0, z=0))
 
     def test_shear_x_in_proportion_to_y(self):
-        m = Matrix.shear_transform(x_moved_in_proportion_to_y=1)
+        m = Matrix.shearing_transform(x_moved_in_proportion_to_y=1)
         p = Point(x=2, y=3, z=4)
         self.assertEqual(m * p, Point(x=5, y=3, z=4))
 
     def test_shear_x_in_proportion_to_z(self):
-        m = Matrix.shear_transform(x_moved_in_proportion_to_z=1)
+        m = Matrix.shearing_transform(x_moved_in_proportion_to_z=1)
         p = Point(x=2, y=3, z=4)
         self.assertEqual(m * p, Point(x=6, y=3, z=4))
 
     def test_shear_y_in_proportion_to_x(self):
-        m = Matrix.shear_transform(y_moved_in_proportion_to_x=1)
+        m = Matrix.shearing_transform(y_moved_in_proportion_to_x=1)
         p = Point(x=2, y=3, z=4)
         self.assertEqual(m * p, Point(x=2, y=5, z=4))
 
     def test_shear_y_in_proportion_to_z(self):
-        m = Matrix.shear_transform(y_moved_in_proportion_to_z=1)
+        m = Matrix.shearing_transform(y_moved_in_proportion_to_z=1)
         p = Point(x=2, y=3, z=4)
         self.assertEqual(m * p, Point(x=2, y=7, z=4))
 
     def test_shear_z_in_proportion_to_x(self):
-        m = Matrix.shear_transform(z_moved_in_proportion_to_x=1)
+        m = Matrix.shearing_transform(z_moved_in_proportion_to_x=1)
         p = Point(x=2, y=3, z=4)
         self.assertEqual(m * p, Point(x=2, y=3, z=6))
 
     def test_shear_z_in_proportion_to_y(self):
-        m = Matrix.shear_transform(z_moved_in_proportion_to_y=1)
+        m = Matrix.shearing_transform(z_moved_in_proportion_to_y=1)
         p = Point(x=2, y=3, z=4)
         self.assertEqual(m * p, Point(x=2, y=3, z=7))
 
     def test_apply_transformations_to_point_in_sequence(self):
         p = Point(x=1, y=0, z=1)
         # Rotate
-        p = Matrix.rotate_x_transform(radians=math.pi/2) * p
+        p = Matrix.rotation_x_transform(radians=math.pi/2) * p
         # Scale
-        p = Matrix.scale_transform(x=5, y=5, z=5) * p
+        p = Matrix.scaling_transform(x=5, y=5, z=5) * p
         # Translate
-        p = Matrix.translate_transform(x=10, y=5, z=7) * p
+        p = Matrix.translation_transform(x=10, y=5, z=7) * p
 
         self.assertEqual(p, Point(x=15, y=0, z=7))
 
@@ -468,9 +468,9 @@ class TestMatrix(unittest.TestCase):
 
     def test_apply_chained_transformations_to_point_in_reverser_order(self):
         p = Point(x=1, y=0, z=1)
-        r = Matrix.rotate_x_transform(radians=math.pi/2)
-        t = Matrix.scale_transform(x=5, y=5, z=5)
-        s = Matrix.translate_transform(x=10, y=5, z=7)
+        r = Matrix.rotation_x_transform(radians=math.pi/2)
+        t = Matrix.scaling_transform(x=5, y=5, z=5)
+        s = Matrix.translation_transform(x=10, y=5, z=7)
         self.assertEqual(s * t * r * p, Point(x=15, y=0, z=7))
 
 
