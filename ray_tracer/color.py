@@ -1,37 +1,35 @@
-from tuple import Tuple
+from util import Utilities
 
-class Color(Tuple):
+
+class Color():
     def __init__(self, red=0.0, green=0.0, blue=0.0):
-        super().__init__(x=red, y=green, z=blue, w=0.0)
-
-    """
-    RGB properties that forward on to the underlying Tuple x/y/z
-    attributes.
-    """
+        self._red = red
+        self._green = green
+        self._blue = blue
 
     @property
     def red(self):
-        return self.x
+        return self._red
 
     @red.setter
     def red(self, value):
-        self.x = value
+        self._red = value
 
     @property
     def green(self):
-        return self.y
+        return self._green
 
     @green.setter
     def green(self, value):
-        self.y = value
+        self._green = value
 
     @property
     def blue(self):
-        return self.z
+        return self._blue
 
     @blue.setter
     def blue(self, value):
-        self.z = value
+        self._blue = value
 
     @staticmethod
     def _clamp_color_value(value):
@@ -42,20 +40,37 @@ class Color(Tuple):
         # 255.
         return min(max(0, int(value * 255 + 0.5)), 255)
 
+    def __eq__(self, other):
+        return Utilities.equal(self._red, other._red) and \
+               Utilities.equal(self._green, other._green) and \
+               Utilities.equal(self._blue, other._blue)
+
     def __mul__(self, rhs):
         # If we are multiplying by another color, then we are going to compute
         # the Hadamard (or Schur) product, which just multiplies each of the
         # RGB components
         if isinstance(rhs, Color):
-            return Color(red=(self.red * rhs.red),
-                         green=(self.green * rhs.green),
-                         blue=(self.blue * rhs.blue))
+            return Color(red=(self._red * rhs._red),
+                         green=(self._green * rhs._green),
+                         blue=(self._blue * rhs._blue))
 
-        # If we are not multiplying by another color, then fall back to the
-        # scalar multiplication provided by the base class
-        return super().__mul__(rhs)
+        # If we are not multiplying by another color, then fall back on scalar
+        # multiplication of individual color components
+        return Color(red=self._red * rhs,
+                     green=self._green * rhs,
+                     blue=self._blue * rhs)
+
+    def __add__(self, rhs):
+        return Color(red=self._red + rhs._red,
+                     green=self._green + rhs._green,
+                     blue=self._blue + rhs._blue)
+
+    def __sub__(self, rhs):
+        return Color(red=self._red - rhs._red,
+                     green=self._green - rhs._green,
+                     blue=self._blue - rhs._blue)
 
     def __str__(self):
-        return "{} {} {}".format(self._clamp_color_value(self.red),
-                                 self._clamp_color_value(self.green),
-                                 self._clamp_color_value(self.blue))
+        return "{} {} {}".format(self._clamp_color_value(self._red),
+                                 self._clamp_color_value(self._green),
+                                 self._clamp_color_value(self._blue))
