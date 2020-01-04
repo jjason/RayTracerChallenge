@@ -1,17 +1,22 @@
 import math
 
 from intersections import Intersection, Intersections
+from materials import Material
 from matrix import Matrix
 from point import Point
 from ray import Ray
-from vector import Vector
 
 
 class Sphere:
-    def __init__(self, center=Point(), radius=1.0, transform=Matrix.identity()):
+    def __init__(self,
+                 center=Point(),
+                 radius=1.0,
+                 transform=Matrix.identity(),
+                 material=Material()):
         self._center = Point(x=center.x, y=center.y, z=center.z)
         self._radius = radius
         self._transform = transform
+        self._material = material
 
     @property
     def center(self):
@@ -28,6 +33,14 @@ class Sphere:
     @transform.setter
     def transform(self, value):
         self._transform = value
+
+    @property
+    def material(self):
+        return self._material
+
+    @material.setter
+    def material(self, value):
+        self._material = value
 
     def intersect(self, ray=Ray()):
         # Apply any transform to the ray before we find intersection of the
@@ -110,9 +123,9 @@ class Sphere:
 
         # Compute the a, b, and c coefficients for the quadratic equation
         # described above:
-        a = Vector.dot_product(ray.direction, ray.direction)
-        b = 2 * Vector.dot_product(ray.direction, sphere_to_ray)
-        c = Vector.dot_product(sphere_to_ray, sphere_to_ray) - self._radius**2
+        a = ray.direction.dot_product(ray.direction)
+        b = 2 * ray.direction.dot_product(sphere_to_ray)
+        c = sphere_to_ray.dot_product(sphere_to_ray) - self._radius**2
 
         # Now compute the discriminant to determine if we even have solutions.
         discriminant = b**2 - 4 * a * c
@@ -123,3 +136,14 @@ class Sphere:
         i2 = Intersection(time=(-b + math.sqrt(discriminant)) / (2 * a), object=self)
 
         return Intersections(i1, i2)
+
+    def normal_at(self, position=Point()):
+        inverse_transform = self._transform.inverse()
+
+        object_point = inverse_transform * position
+        object_normal = object_point - Point(x=0, y=0, z=0)
+
+        normal = inverse_transform.transpose() * object_normal
+        normal.w = 0.0
+
+        return normal.normalize()

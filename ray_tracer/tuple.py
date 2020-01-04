@@ -1,4 +1,7 @@
+import math
+
 from util import Utilities
+
 
 class Tuple:
     def __init__(self, x=0.0, y=0.0, z=0.0, w=0.0):
@@ -88,3 +91,38 @@ class Tuple:
 
     def __str__(self):
         return "x={}, y={}, z={}, w={}".format(self._x, self._y, self._z, self._w)
+
+    def magnitude(self):
+        if not self.is_vector():
+            raise NotImplementedError("Only vectors have magnitude")
+
+        return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+
+    def normalize(self):
+        if not self.is_vector():
+            raise NotImplementedError("Only vectors can be normalized")
+
+        magnitude = self.magnitude()
+        return Tuple(x=self.x/magnitude,
+                     y=self.y/magnitude,
+                     z=self.z/magnitude,
+                     w=0.0)
+
+    def dot_product(self, rhs):
+        if not self.is_vector() or not rhs.is_vector():
+            raise NotImplementedError("Dot product requires two vectors")
+        return (self._x * rhs._x) + (self._y * rhs._y) + (self._z * rhs._z)
+
+    def cross_product(self, rhs):
+        if not self.is_vector() or not rhs.is_vector():
+            raise NotImplementedError("Cross product requires two vectors")
+        return Tuple(x=self._y * rhs._z - self._z * rhs._y,
+                     y=self._z * rhs._x - self._x * rhs._z,
+                     z=self._x * rhs._y - self._y * rhs._x,
+                     w=0.0)
+
+    def reflect(self, normal):
+        if not self.is_vector():
+            raise NotImplementedError("Only vectors can be reflected")
+
+        return self - normal * 2 * self.dot_product(normal)

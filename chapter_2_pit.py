@@ -22,7 +22,7 @@ class Projectile:
 
 
 projectile = Projectile(position=Point(x=0, y=1, z=0),
-                        velocity=(Vector.normalize(Vector(x=1, y=1.8, z=0)) * 11.25))
+                        velocity=Vector(x=1, y=1.8, z=0).normalize() * 11.25)
 environment = Environment(gravity=Vector(x=0, y=-0.1, z=0),
                           wind=Vector(x=-0.01, y=0, z=0))
 
@@ -36,5 +36,5 @@ while projectile.position.y >= 0:
     canvas.set_pixel(x=x, y=y, color=red)
     projectile.tick(environment)
 
-with open("projectile.ppm", "w") as file:
+with open("chapter_2.ppm", "w") as file:
     file.write(canvas.to_ppm())

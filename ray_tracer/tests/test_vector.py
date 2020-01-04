@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from math import sqrt
@@ -5,6 +6,7 @@ from point import Point
 from tuple import Tuple
 from util import Utilities
 from vector import Vector
+
 
 class TestVector(unittest.TestCase):
     def test_create(self):
@@ -53,22 +55,40 @@ class TestVector(unittest.TestCase):
         self.assertTrue(Utilities.equal(Vector(-1, -2, -3).magnitude(), sqrt(14)))
 
     def test_normalize(self):
-        self.assertEqual(Vector.normalize(Vector(4, 0, 0)), Vector(1, 0, 0))
-        self.assertEqual(Vector.normalize(Vector(1, 2, 3)), Vector(0.26726, 0.53452, 0.80178))
+        self.assertEqual(Vector(4, 0, 0).normalize(), Vector(1, 0, 0))
+        self.assertEqual(Vector(1, 2, 3).normalize(), Vector(0.26726, 0.53452, 0.80178))
 
     def test_normalized_magnitude(self):
-        self.assertTrue(Utilities.equal(Vector.normalize(Vector(1, 2, 3)).magnitude(), 1))
+        self.assertTrue(
+            Utilities.equal(Vector(1, 2, 3).normalize().magnitude(), 1))
 
     def test_dot_product(self):
         v1 = Vector(1, 2, 3)
         v2 = Vector(2, 3, 4)
-        self.assertTrue(Utilities.equal(Vector.dot_product(v1, v2), 20))
+        self.assertTrue(Utilities.equal(v1.dot_product(v2), 20))
 
     def test_cross_product(self):
         v1 = Vector(1, 2, 3)
         v2 = Vector(2, 3, 4)
-        self.assertEqual(Vector.cross_product(v1, v2), Vector(-1, 2, -1))
-        self.assertEqual(Vector.cross_product(v2, v1), Vector(1, -2, 1))
+        self.assertEqual(v1.cross_product(v2), Vector(-1, 2, -1))
+        self.assertEqual(v2.cross_product(v1), Vector(1, -2, 1))
+
+    def test_cross_product_with_point(self):
+        with self.assertRaises(NotImplementedError):
+            Vector().cross_product(Point())
+
+    def test_reflect_flat_surface(self):
+        v = Vector(x=1, y=-1, z=0)
+        n = Vector(x=0, y=1, z=0)
+        r = v.reflect(normal=n)
+        self.assertEqual(r, Vector(x=1, y=1, z=0))
+
+    def test_reflect_slanted_surface(self):
+        v = Vector(0, -1, 0)
+        n = Vector(x=math.sqrt(2)/2, y=math.sqrt(2)/2, z=0)
+        r = v.reflect(normal=n)
+        self.assertEqual(r, Vector(x=1, y=0, z=0))
+
 
 if __name__ == '__main__':
     unittest.main()
