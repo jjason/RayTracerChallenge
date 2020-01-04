@@ -1,15 +1,108 @@
-class Intersection:
-    def __init__(self, time=0.0, object=None):
+from point import Point
+from ray import Ray
+from vector import Vector
+
+
+class Computations:
+    def __init__(self,
+                 time=0.0,
+                 the_object=None,
+                 position=None,
+                 eye=None,
+                 normal=None):
         self._time = time
-        self._object = object
+        self._the_object = the_object
+        self._position = position if position else Point()
+        self._eye = eye if eye else Vector()
+        self._normal = normal if normal else Vector()
+        self._inside = False
+
+    @property
+    def time(self):
+        return self._time
+
+    @time.setter
+    def time(self, value):
+        self._time = value
+
+    @property
+    def the_object(self):
+        return self._the_object
+
+    @the_object.setter
+    def the_object(self, value):
+        self._the_object = value
+
+    @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, value):
+        self._position = value
+
+    @property
+    def eye(self):
+        return self._eye
+
+    @eye.setter
+    def eye(self, value):
+        self._eye = value
+
+    @property
+    def normal(self):
+        return self._normal
+
+    @normal.setter
+    def normal(self, value):
+        self._normal = value
+
+    @property
+    def inside(self):
+        return self._inside
+
+    @inside.setter
+    def inside(self, value):
+        self._inside = value
+
+
+class Intersection:
+    def __init__(self, time=0.0, the_object=None):
+        self._time = time
+        self._the_object = the_object
 
     @property
     def time(self):
         return self._time
 
     @property
-    def object(self):
-        return self._object
+    def the_object(self):
+        return self._the_object
+
+    def prepare_computations(self, ray=Ray()):
+        computations = Computations()
+
+        # Copy simple values from intersection
+        computations.time = self._time
+        computations.the_object = self._the_object
+
+        # Precompute useful values:
+        # - the position on the ray where intersection occurs
+        # - the vector to the eye (i.e., the reverse of the array)
+        # - the normal at the point of intersection
+        computations.position = ray.position(self._time)
+        computations.eye = -ray.direction
+        computations.normal = self._the_object.normal_at(position=computations.position)
+
+        # If the normal vector points away from the eye vector (i.e., the dot
+        # product is less than zero), then the hit was inside the object.  We
+        # need to set the inside flag appropriately and negate the normal
+        # vector to point into the object.
+        if computations.normal.dot_product(computations.eye) < 0:
+            computations.inside = True
+            computations.normal = -computations.normal
+
+        return computations
 
 
 class Intersections:

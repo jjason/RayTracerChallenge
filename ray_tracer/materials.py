@@ -9,12 +9,13 @@ from vector import Vector
 
 class Material:
     def __init__(self,
-                 color=Color(red=1, green=1, blue=1),
+                 color=None,
                  ambient=0.1,
                  diffuse=0.9,
                  specular=0.9,
                  shininess=200.0):
-        self._color = Color(red=color.red, green=color.green, blue=color.blue)
+        self._color = Color(red=color.red, green=color.green, blue=color.blue) \
+            if color else Color(red=1, green=1, blue=1)
         self._ambient = float(ambient)
         self._diffuse = float(diffuse)
         self._specular = float(specular)
@@ -72,11 +73,7 @@ class Material:
             Utilities.equal(self._specular, other._specular) and \
             Utilities.equal(self._shininess, other._shininess)
 
-    def lighting(self,
-                 light=PointLight(),
-                 position=Point(),
-                 eye=Vector(),
-                 normal=Vector()):
+    def lighting(self, light, position, eye, normal):
         # Combine the material's color with the intensity/color of the light
         effective_color = self._color * light.intensity
 

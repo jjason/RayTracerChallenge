@@ -68,14 +68,14 @@ for y in range(canvas_pixels):
             # Figure out the position on the ray from the eye to where the ray
             # hit the sphere and then compute normal at that location
             position = ray.position(time=hit.time)
-            normal = hit.object.normal_at(position=position)
+            normal = hit.the_object.normal_at(position=position)
 
             # The vector to the eye is the opposite of the ray direction
             eye = -ray.direction
 
             # Now we need to compute the color value for the position on the
             # sphere
-            color = hit.object.material.lighting(light=light,
+            color = hit.the_object.material.lighting(light=light,
                                                  position=position,
                                                  eye=eye,
                                                  normal=normal)

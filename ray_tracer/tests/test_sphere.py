@@ -55,8 +55,8 @@ class TestSphere(unittest.TestCase):
         r = Ray(origin=Point(x=0, y=0, z=-5), direction=Vector(x=0, y=0, z=1))
         i = self._sphere.intersect(ray=r)
         self.assertEqual(i.count, 2)
-        self.assertIs(i[0].object, self._sphere)
-        self.assertIs(i[1].object, self._sphere)
+        self.assertIs(i[0].the_object, self._sphere)
+        self.assertIs(i[1].the_object, self._sphere)
 
     def test_intersect_scaled(self):
         r = Ray(origin=Point(x=0, y=0, z=-5), direction=Vector(x=0, y=0, z=1))

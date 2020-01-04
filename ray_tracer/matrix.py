@@ -147,6 +147,36 @@ class Matrix:
 
         return m
 
+    @staticmethod
+    def view_transform(eye, to, up):
+        # First compute the forward vector (i.e., the vector from the eye to the
+        # scene, aka the z axis) and normalize it.
+        forward_normalized = (to - eye).normalize()
+
+        # Now take the cross product of our normalized forward vector and the
+        # normalized up vector to get the new "left" vector (aka, what would be
+        # the x axis) and normalize it.  Remember that the cross product gives
+        # us a vector that is perpendicular to both forward and up.
+        left_normalized = forward_normalized.cross_product(up.normalize())
+
+        # Compute the true up vector (aka, y axis) by taking the cross product
+        # of the normalized left (x) and normalized forward (z) vectors.  Doing
+        # this step allows us to approximate the up vector on input.
+        up_normalized = left_normalized.cross_product(forward_normalized)
+
+        # Construct a matrix that represents the orientation matrix
+        orientation = Matrix(rows=4, columns=4, values=[
+            left_normalized.x, left_normalized.y, left_normalized.z, 0,
+            up_normalized.x, up_normalized.y, up_normalized.z, 0,
+            -forward_normalized.x, -forward_normalized.y, -forward_normalized.z, 0,
+            0, 0, 0, 1])
+
+        # Before applying the orientation to the scene we need to move the scene
+        # into place.  To do that we multiply the orientation matrix by the
+        # negative of from so that when we apply this transform, it translates
+        # the scene and then orients it.
+        return orientation * Matrix.translation_transform(x=-eye.x, y=-eye.y, z=-eye.z)
+
     @property
     def rows(self):
         return self._rows
