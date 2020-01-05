@@ -11,12 +11,13 @@ class Sphere:
     def __init__(self,
                  center=Point(),
                  radius=1.0,
-                 transform=Matrix.identity(),
-                 material=Material()):
-        self._center = Point(x=center.x, y=center.y, z=center.z)
+                 transform=None,
+                 material=None):
+        self._center = Point(x=center.x, y=center.y, z=center.z) \
+            if center else Point(x=0, y=0, z=0)
         self._radius = radius
-        self._transform = transform
-        self._material = material
+        self._transform = transform if transform else Matrix.identity()
+        self._material = material if material else Material()
 
     @property
     def center(self):
@@ -132,8 +133,10 @@ class Sphere:
         if discriminant < 0:
             return Intersections()
 
-        i1 = Intersection(time=(-b - math.sqrt(discriminant)) / (2 * a), object=self)
-        i2 = Intersection(time=(-b + math.sqrt(discriminant)) / (2 * a), object=self)
+        i1 = Intersection(time=(-b - math.sqrt(discriminant)) / (2 * a),
+                          the_object=self)
+        i2 = Intersection(time=(-b + math.sqrt(discriminant)) / (2 * a),
+                          the_object=self)
 
         return Intersections(i1, i2)
 

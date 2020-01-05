@@ -473,6 +473,38 @@ class TestMatrix(unittest.TestCase):
         s = Matrix.translation_transform(x=10, y=5, z=7)
         self.assertEqual(s * t * r * p, Point(x=15, y=0, z=7))
 
+    def test_view_transform_default_orientation(self):
+        e = Point(x=0, y=0, z=0)
+        t = Point(x=0, y=0, z=-1)
+        u = Vector(x=0, y=1, z=0)
+        t = Matrix.view_transform(eye=e, to=t, up=u)
+        self.assertEqual(t, Matrix.identity(dimensions=4))
+
+    def test_view_transform_looking_positive_z(self):
+        e = Point(x=0, y=0, z=0)
+        t = Point(x=0, y=0, z=1)
+        u = Vector(x=0, y=1, z=0)
+        t = Matrix.view_transform(eye=e, to=t, up=u)
+        self.assertEqual(t, Matrix.scaling_transform(x=-1, y=1, z=-1))
+
+    def test_view_transform_moves_world(self):
+        e = Point(x=0, y=0, z=8)
+        t = Point(x=0, y=0, z=0)
+        u = Vector(x=0, y=1, z=0)
+        t = Matrix.view_transform(eye=e, to=t, up=u)
+        self.assertEqual(t, Matrix.translation_transform(x=0, y=0, z=-8))
+
+    def test_view_transform_arbitrary(self):
+        e = Point(x=1, y=3, z=2)
+        t = Point(x=4, y=-2, z=8)
+        u = Vector(x=1, y=1, z=0)
+        t = Matrix.view_transform(eye=e, to=t, up=u)
+        m = Matrix(rows=4, columns=4, values=[-0.50709, 0.50709, 0.67612, -2.36643,
+                                              0.76772, 0.60609, 0.12122, -2.82843,
+                                              -0.35857, 0.59761, -0.71714, 0.00000,
+                                              0.00000, 0.00000, 0.00000, 1.00000])
+        self.assertEqual(t, m)
+
 
 if __name__ == '__main__':
     unittest.main()

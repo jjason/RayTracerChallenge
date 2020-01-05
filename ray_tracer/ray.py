@@ -4,9 +4,12 @@ from vector import Vector
 
 
 class Ray:
-    def __init__(self, origin=Point(), direction=Vector()):
-        self._origin = Point(x=origin.x, y=origin.y, z=origin.z)
-        self._direction = Vector(x=direction.x, y=direction.y, z=direction.z)
+    def __init__(self, origin=None, direction=None):
+        self._origin = Point(x=origin.x, y=origin.y, z=origin.z) \
+            if origin else Point(x=0, y=0, z=0)
+        self._direction = Vector(x=direction.x, y=direction.y, z=direction.z) \
+            if direction else Vector(x=0, y=0, z=0)
+
 
     @property
     def origin(self):
