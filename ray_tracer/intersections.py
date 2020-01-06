@@ -1,5 +1,6 @@
 from point import Point
 from ray import Ray
+from util import Utilities
 from vector import Vector
 
 
@@ -16,6 +17,7 @@ class Computations:
         self._eye = eye if eye else Vector()
         self._normal = normal if normal else Vector()
         self._inside = False
+        self._over_position = 0
 
     @property
     def time(self):
@@ -65,6 +67,14 @@ class Computations:
     def inside(self, value):
         self._inside = value
 
+    @property
+    def over_position(self):
+        return self._over_position
+
+    @over_position.setter
+    def over_position(self, value):
+        self._over_position = value
+
 
 class Intersection:
     def __init__(self, time=0.0, the_object=None):
@@ -101,6 +111,15 @@ class Intersection:
         if computations.normal.dot_product(computations.eye) < 0:
             computations.inside = True
             computations.normal = -computations.normal
+
+        # To prevent an object from casting a shadow over itself (because of
+        # inaccuracies in floating point arithmetic), adjust the point just
+        # slightly in the direction of the normal.  It is this point that will
+        # actually be used when determining if the point is in a shadow to keep
+        # from accidentally shadowing a point from the object it belongs to.
+        computations.over_position = computations.position + \
+                                     computations.normal * \
+                                     Utilities.EPSILON
 
         return computations
 

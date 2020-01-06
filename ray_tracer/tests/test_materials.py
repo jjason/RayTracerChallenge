@@ -76,7 +76,8 @@ class TestMaterial(unittest.TestCase):
         c = self._material.lighting(light=l,
                                     position=self._position,
                                     eye=e,
-                                    normal=n)
+                                    normal=n,
+                                    in_shadow=False)
         self.assertEqual(c, Color(red=1.9, blue=1.9, green=1.9))
 
     def test_lighting_eye_offset_45_and_light_opposite_surface(self):
@@ -95,7 +96,8 @@ class TestMaterial(unittest.TestCase):
         c = self._material.lighting(light=l,
                                     position=self._position,
                                     eye=e,
-                                    normal=n)
+                                    normal=n,
+                                    in_shadow=False)
         self.assertEqual(c, Color(red=1.0, blue=1.0, green=1.0))
 
     def test_lighting_eye_opposite_and_light_offset_45_surface(self):
@@ -114,7 +116,8 @@ class TestMaterial(unittest.TestCase):
         c = self._material.lighting(light=l,
                                     position=self._position,
                                     eye=e,
-                                    normal=n)
+                                    normal=n,
+                                    in_shadow=False)
         self.assertEqual(c, Color(red=0.7364, blue=0.7364, green=0.7364))
 
     def test_lighting_eye_offset_neg_45_and_light_offset_45_surface(self):
@@ -134,7 +137,8 @@ class TestMaterial(unittest.TestCase):
         c = self._material.lighting(light=l,
                                     position=self._position,
                                     eye=e,
-                                    normal=n)
+                                    normal=n,
+                                    in_shadow=False)
         self.assertEqual(c, Color(red=1.6364, blue=1.6364, green=1.6364))
 
     def test_lighting_eye_opposite_and_light_behind_surface(self):
@@ -152,7 +156,27 @@ class TestMaterial(unittest.TestCase):
         c = self._material.lighting(light=l,
                                     position=self._position,
                                     eye=e,
-                                    normal=n)
+                                    normal=n,
+                                    in_shadow=False)
+        self.assertEqual(c, Color(red=0.1, blue=0.1, green=0.1))
+
+    def test_lighting_with_surface_in_shadow(self):
+        #
+        #                |
+        #                |
+        # l    e   <--n--|
+        #                |
+        #                |
+        #
+        e = Vector(x=0, y=0, z=-1)
+        n = Vector(x=0, y=0, z=-1)
+        l = PointLight(position=Point(x=0, y=0, z=-10),
+                       intensity=Color(red=1, green=1, blue=1))
+        c = self._material.lighting(light=l,
+                                    position=self._position,
+                                    eye=e,
+                                    normal=n,
+                                    in_shadow=True)
         self.assertEqual(c, Color(red=0.1, blue=0.1, green=0.1))
 
 

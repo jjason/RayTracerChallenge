@@ -1,6 +1,7 @@
 import unittest
 
 from intersections import Intersection, Intersections
+from matrix import Matrix
 from point import Point
 from ray import Ray
 from sphere import Sphere
@@ -78,6 +79,14 @@ class TestIntersections(unittest.TestCase):
         i3 = Intersection(time=-3, the_object=self._sphere)
         i4 = Intersection(time=2, the_object=self._sphere)
         self.assertEqual(Intersections(i1, i2, i3, i4).hit(), i4)
+
+    def test_hit_should_offset_the_point(self):
+        r = Ray(origin=Point(x=0, y=0, z=-5), direction=Vector(x=0, y=0, z=1))
+        s = Sphere(transform=Matrix.translation_transform(x=0, y=0, z=1))
+        i = Intersection(time=5, the_object=s)
+        c = i.prepare_computations(ray=r)
+        self.assertLess(c.over_position.z, -Utilities.EPSILON / 2)
+        self.assertGreater(c.position.z, c.over_position.z)
 
 
 if __name__ == '__main__':
