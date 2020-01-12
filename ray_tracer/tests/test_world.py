@@ -68,6 +68,18 @@ class TestWorld(unittest.TestCase):
         co = self._default_world.shade_hit(c)
         self.assertEqual(co, Color(red=0.90498, green=0.90498, blue=0.90498))
 
+    def test_shade_hit_in_a_shadow(self):
+        s1 = Sphere()
+        s2 = Sphere(transform=Matrix.translation_transform(x=0, y=0, z=10))
+        l = PointLight(position=Point(x=0, y=0, z=-10),
+                       intensity=Color(red=1, green=1, blue=1))
+        w = World(objects=[s1, s2], light_source=l)
+        r = Ray(origin=Point(x=0, y=0, z=5), direction=Vector(x=0, y=0, z=1))
+        i = Intersection(time=4, the_object=s2)
+        c = i.prepare_computations(ray=r)
+        co = w.shade_hit(computations=c)
+        self.assertEqual(co, Color(red=0.1, green=0.1, blue=0.1))
+
     def test_color_at_when_ray_misses(self):
         r = Ray(origin=Point(x=0, y=0, z=-5), direction=Vector(x=0, y=1, z=0))
         c = self._default_world.color_at(ray=r)
@@ -86,6 +98,58 @@ class TestWorld(unittest.TestCase):
         r = Ray(origin=Point(x=0, y=0, z=0.75), direction=Vector(x=0, y=0, z=-1))
         c = self._default_world.color_at(ray=r)
         self.assertEqual(c, i.material.color)
+
+    def test_no_shadow_when_nothing_collinear_with_point_and_light(self):
+        #
+        # l      p
+        #        .
+        #        .
+        #  . . . o . . .
+        #        .
+        #        .
+        #        .
+        #
+        p = Point(x=0, y=10, z=0)
+        self.assertFalse(self._default_world.is_shadowed(position=p))
+
+    def test_shadow_when_object_is_between_point_and_light(self):
+        #
+        # l      .
+        #        .
+        #        .
+        #  . . . o . . .
+        #        .
+        #        .
+        #        .     p
+        #
+        p = Point(x=10, y=-10, z=10)
+        self.assertTrue(self._default_world.is_shadowed(position=p))
+
+    def test_no_shadow_when_point_is_behind_light(self):
+        #
+        # p      .
+        #        .
+        #      l .
+        #  . . . o . . .
+        #        .
+        #        .
+        #        .
+        #
+        p = Point(x=-20, y=20, z=-20)
+        self.assertFalse(self._default_world.is_shadowed(position=p))
+
+    def test_no_shadow_when_object_is_behind_point(self):
+        #
+        # l      .
+        #        .
+        #      p .
+        #  . . . o . . .
+        #        .
+        #        .
+        #        .
+        #
+        p = Point(x=-2, y=2, z=-2)
+        self.assertFalse(self._default_world.is_shadowed(position=p))
 
 
 if __name__ == '__main__':
