@@ -24,3 +24,6 @@ class PointLight:
     def __eq__(self, other):
         return self._position == other._position and \
                self._intensity == other._intensity
+
+    def __ne__(self, other):
+        return not self == other
