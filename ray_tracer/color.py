@@ -45,6 +45,9 @@ class Color():
                Utilities.equal(self._green, other._green) and \
                Utilities.equal(self._blue, other._blue)
 
+    def __ne__(self, other):
+        return not self == other
+
     def __mul__(self, rhs):
         # If we are multiplying by another color, then we are going to compute
         # the Hadamard (or Schur) product, which just multiplies each of the

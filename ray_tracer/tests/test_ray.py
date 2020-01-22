@@ -45,6 +45,54 @@ class TestRay(unittest.TestCase):
         self.assertEqual(r2.origin, Point(x=2, y=6, z=12))
         self.assertEqual(r2.direction, Vector(x=0, y=3, z=0))
 
+    def test_equal(self):
+        r1 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=0))
+        r2 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=0))
+        self.assertTrue(r1 == r1)
+        self.assertTrue(r1 == r2)
+
+        r3 = Ray(origin=Point(x=0, y=2, z=3), direction=Vector(x=0, y=1, z=0))
+        self.assertFalse(r1 == r3)
+
+        r3 = Ray(origin=Point(x=1, y=3, z=3), direction=Vector(x=0, y=1, z=0))
+        self.assertFalse(r1 == r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=4), direction=Vector(x=0, y=1, z=0))
+        self.assertFalse(r1 == r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=1, y=1, z=0))
+        self.assertFalse(r1 == r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=0, z=0))
+        self.assertFalse(r1 == r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=1))
+        self.assertFalse(r1 == r3)
+
+    def test_not_equal(self):
+        r1 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=0))
+        r2 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=0))
+        self.assertFalse(r1 != r1)
+        self.assertFalse(r1 != r2)
+
+        r3 = Ray(origin=Point(x=0, y=2, z=3), direction=Vector(x=0, y=1, z=0))
+        self.assertTrue(r1 != r3)
+
+        r3 = Ray(origin=Point(x=1, y=3, z=3), direction=Vector(x=0, y=1, z=0))
+        self.assertTrue(r1 != r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=4), direction=Vector(x=0, y=1, z=0))
+        self.assertTrue(r1 != r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=1, y=1, z=0))
+        self.assertTrue(r1 != r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=0, z=0))
+        self.assertTrue(r1 != r3)
+
+        r3 = Ray(origin=Point(x=1, y=2, z=3), direction=Vector(x=0, y=1, z=1))
+        self.assertTrue(r1 != r3)
+
 
 if __name__ == '__main__':
     unittest.main()

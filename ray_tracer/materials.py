@@ -73,6 +73,9 @@ class Material:
             Utilities.equal(self._specular, other._specular) and \
             Utilities.equal(self._shininess, other._shininess)
 
+    def __ne__(self, other):
+        return not self == other
+
     def lighting(self, light, position, eye, normal, in_shadow):
         # Combine the material's color with the intensity/color of the light
         effective_color = self._color * light.intensity

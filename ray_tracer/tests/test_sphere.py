@@ -1,7 +1,6 @@
 import math
 import unittest
 
-from materials import Material
 from matrix import Matrix
 from point import Point
 from ray import Ray
@@ -72,14 +71,6 @@ class TestSphere(unittest.TestCase):
         i = self._sphere.intersect(ray=r)
         self.assertEqual(i.count, 0)
 
-    def test_transform_default(self):
-        self.assertEqual(self._sphere.transform, Matrix.identity())
-
-    def test_transform_set(self):
-        t = Matrix.translation_transform(x=2, y=3, z=4)
-        self._sphere.transform = t
-        self.assertEqual(self._sphere.transform, t)
-
     def test_normal_on_x_axis(self):
         n = self._sphere.normal_at(position=Point(x=1, y=0, z=0))
         self.assertEqual(n, Vector(x=1, y=0, z=0))
@@ -118,13 +109,6 @@ class TestSphere(unittest.TestCase):
                                                   y=math.sqrt(2)/2,
                                                   z=-math.sqrt(2)/2))
         self.assertEqual(n, Vector(0, 0.97014, -0.24254))
-
-    def test_material_default(self):
-        self.assertEqual(self._sphere.material, Material())
-
-    def test_material_set(self):
-        self._sphere.material = Material(ambient=1.0)
-        self.assertEqual(self._sphere.material, Material(ambient=1.0))
 
 
 if __name__ == '__main__':

@@ -1,53 +1,49 @@
 import math
 
 from intersections import Intersection, Intersections
-from materials import Material
-from matrix import Matrix
 from point import Point
-from ray import Ray
+from shape import Shape
 
 
-class Sphere:
+class Sphere(Shape):
     def __init__(self,
                  center=Point(),
                  radius=1.0,
                  transform=None,
                  material=None):
-        self._center = Point(x=center.x, y=center.y, z=center.z) \
-            if center else Point(x=0, y=0, z=0)
-        self._radius = radius
-        self._transform = transform if transform else Matrix.identity()
-        self._material = material if material else Material()
+        super().__init__(transform=transform, material=material)
+        self.center = center
+        self.radius = radius
 
     @property
     def center(self):
         return self._center
 
+    @center.setter
+    def center(self, value):
+        self._center = Point(x=value.x, y=value.y, z=value.z) \
+            if value else Point(x=0, y=0, z=0)
+
     @property
     def radius(self):
         return self._radius
 
-    @property
-    def transform(self):
-        return self._transform
+    @radius.setter
+    def radius(self, value):
+        self._radius = value
 
-    @transform.setter
-    def transform(self, value):
-        self._transform = value
+    def _intersect(self, ray):
+        """
+        Override base class method to provide sphere-specific method for
+        computing intersection with ray and sphere.
 
-    @property
-    def material(self):
-        return self._material
+        This method should not be called directly.  Instead, call the public
+        intersect method defined in the Shape class.
 
-    @material.setter
-    def material(self, value):
-        self._material = value
-
-    def intersect(self, ray=Ray()):
-        # Apply any transform to the ray before we find intersection of the
-        # ray with this sphere
-        ray = ray.transform(transformation=self._transform.inverse())
-
+        :param ray: The ray we use to compute intersections.
+        :return: Intersections, the set of Intersection objects representing
+            the intersections between the provided ray and this sphere.
+        """
         # To understand how to compute the intersection of a ray with this
         # sphere, it might be helpful to read this lesson,
         # https://tinyurl.com/tuhcnx7, on the Analytical
@@ -140,13 +136,16 @@ class Sphere:
 
         return Intersections(i1, i2)
 
-    def normal_at(self, position=Point()):
-        inverse_transform = self._transform.inverse()
+    def _normal_at(self, position):
+        """
+        Override base class method to provide sphere-specific method for
+        computing normal at the point specified.
 
-        object_point = inverse_transform * position
-        object_normal = object_point - Point(x=0, y=0, z=0)
+        This method should not be called directly.  Instead, call the public
+        normal_at method defined in the Shape class.
 
-        normal = inverse_transform.transpose() * object_normal
-        normal.w = 0.0
-
-        return normal.normalize()
+        :param position: The position on the sphere for which the normal is
+            to be computed.
+        :return: Vector, the normal at the point provided.
+        """
+        return position - Point(x=0, y=0, z=0)

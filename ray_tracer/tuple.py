@@ -54,6 +54,9 @@ class Tuple:
                Utilities.equal(self._z, other.z) and \
                Utilities.equal(self._w, other.w)
 
+    def __ne__(self, other):
+        return not self == other
+
     def __add__(self, other):
         # It does not make sense to add two points
         if self.is_point() and other.is_point():
