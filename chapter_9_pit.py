@@ -7,6 +7,7 @@ from ray_tracer.color import Color
 from ray_tracer.lights import PointLight
 from ray_tracer.materials import Material
 from ray_tracer.matrix import Matrix
+from ray_tracer.plane import Plane
 from ray_tracer.point import Point
 from ray_tracer.sphere import Sphere
 from ray_tracer.vector import Vector
@@ -16,23 +17,14 @@ from ray_tracer.world import World
 # two walls and a floor, render them using a camera and world
 
 # The floor:
-floor = Sphere(transform=Matrix.scaling_transform(x=10, y=0.01, z=10),
-               material=Material(color=Color(red=1, green=0.9, blue=0.9),
-                                 specular=1))
-
-# The left wall
-left_wall = Sphere(material=floor.material)
-left_wall.transform = Matrix.translation_transform(x=0, y=0, z=5) * \
-                      Matrix.rotation_y_transform(radians=-math.pi/4) * \
-                      Matrix.rotation_x_transform(radians=math.pi/2) * \
-                      Matrix.scaling_transform(x=10, y=0.01, z=10)
+floor = Plane(material=Material(color=Color(red=1, green=0.9, blue=0.9),
+                                specular=1))
 
 # The right wall
-right_wall = Sphere(material=floor.material)
+right_wall = Plane(material=floor.material)
 right_wall.transform = Matrix.translation_transform(x=0, y=0, z=5) * \
-                       Matrix.rotation_y_transform(radians=math.pi/4) * \
-                       Matrix.rotation_x_transform(radians=math.pi/2) * \
-                       Matrix.scaling_transform(x=10, y=0.01, z=10)
+                       Matrix.rotation_x_transform(radians=math.pi/2)
+
 
 # For the large sphere in the middle, create a unit sphere that is translated
 # upward slightly and is colored green
@@ -65,7 +57,6 @@ left_sphere = Sphere(transform=Matrix.translation_transform(x=-1.5,
 
 # The world's light source is white and shining from above and to the left
 world = World(objects=[floor,
-                       left_wall,
                        right_wall,
                        middle_sphere,
                        right_sphere,
@@ -84,5 +75,5 @@ camera = Camera(horizontal_size=200,
 # Render the world
 canvas = camera.render(world=world)
 
-with open("chapter_7.ppm", "w") as file:
+with open("chapter_9.ppm", "w") as file:
     file.write(canvas.to_ppm())
