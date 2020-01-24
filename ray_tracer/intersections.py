@@ -7,17 +7,17 @@ from vector import Vector
 class Computations:
     def __init__(self,
                  time=0.0,
-                 the_object=None,
+                 shape=None,
                  position=None,
                  eye=None,
                  normal=None):
-        self._time = time
-        self._the_object = the_object
-        self._position = position if position else Point()
-        self._eye = eye if eye else Vector()
-        self._normal = normal if normal else Vector()
-        self._inside = False
-        self._over_position = 0
+        self.time = time
+        self.shape = shape
+        self.position = position
+        self.eye = eye
+        self.normal = normal
+        self.inside = False
+        self.over_position = 0
 
     @property
     def time(self):
@@ -28,12 +28,12 @@ class Computations:
         self._time = value
 
     @property
-    def the_object(self):
-        return self._the_object
+    def shape(self):
+        return self._shape
 
-    @the_object.setter
-    def the_object(self, value):
-        self._the_object = value
+    @shape.setter
+    def shape(self, value):
+        self._shape = value
 
     @property
     def position(self):
@@ -41,7 +41,7 @@ class Computations:
 
     @position.setter
     def position(self, value):
-        self._position = value
+        self._position = value if value else Point()
 
     @property
     def eye(self):
@@ -49,7 +49,7 @@ class Computations:
 
     @eye.setter
     def eye(self, value):
-        self._eye = value
+        self._eye = value if value else Vector()
 
     @property
     def normal(self):
@@ -57,7 +57,7 @@ class Computations:
 
     @normal.setter
     def normal(self, value):
-        self._normal = value
+        self._normal = value if value else Vector()
 
     @property
     def inside(self):
@@ -77,32 +77,40 @@ class Computations:
 
 
 class Intersection:
-    def __init__(self, time=0.0, the_object=None):
-        self._time = time
-        self._the_object = the_object
+    def __init__(self, time=0.0, shape=None):
+        self.time = time
+        self.shape = shape
 
     @property
     def time(self):
         return self._time
 
+    @time.setter
+    def time(self, value):
+        self._time = value
+
     @property
-    def the_object(self):
-        return self._the_object
+    def shape(self):
+        return self._shape
+
+    @shape.setter
+    def shape(self, value):
+        self._shape = value
 
     def prepare_computations(self, ray=Ray()):
         computations = Computations()
 
         # Copy simple values from intersection
-        computations.time = self._time
-        computations.the_object = self._the_object
+        computations.time = self.time
+        computations.shape = self.shape
 
         # Precompute useful values:
         # - the position on the ray where intersection occurs
         # - the vector to the eye (i.e., the reverse of the array)
         # - the normal at the point of intersection
-        computations.position = ray.position(self._time)
+        computations.position = ray.position(self.time)
         computations.eye = -ray.direction
-        computations.normal = self._the_object.normal_at(position=computations.position)
+        computations.normal = self.shape.normal_at(position=computations.position)
 
         # If the normal vector points away from the eye vector (i.e., the dot
         # product is less than zero), then the hit was inside the object.  We

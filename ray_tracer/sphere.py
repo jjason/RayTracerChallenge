@@ -130,9 +130,9 @@ class Sphere(Shape):
             return Intersections()
 
         i1 = Intersection(time=(-b - math.sqrt(discriminant)) / (2 * a),
-                          the_object=self)
+                          shape=self)
         i2 = Intersection(time=(-b + math.sqrt(discriminant)) / (2 * a),
-                          the_object=self)
+                          shape=self)
 
         return Intersections(i1, i2)
 
