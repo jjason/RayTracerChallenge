@@ -41,39 +41,39 @@ class Color():
         return min(max(0, int(value * 255 + 0.5)), 255)
 
     def __eq__(self, other):
-        return Utilities.equal(self._red, other._red) and \
-               Utilities.equal(self._green, other._green) and \
-               Utilities.equal(self._blue, other._blue)
+        return Utilities.equal(self.red, other.red) and \
+               Utilities.equal(self.green, other.green) and \
+               Utilities.equal(self.blue, other.blue)
 
     def __ne__(self, other):
         return not self == other
 
     def __mul__(self, rhs):
-        # If we are multiplying by another color, then we are going to compute
+        # If we are multiplying by a numeric, then perform scalar multiplication
+        # of individual color components
+        if isinstance(rhs, int) or isinstance(rhs, float):
+            return Color(red=self.red * rhs,
+                         green=self.green * rhs,
+                         blue=self.blue * rhs)
+
+        # If we are not multiplying by a numeric, then we are going to compute
         # the Hadamard (or Schur) product, which just multiplies each of the
         # RGB components
-        if isinstance(rhs, Color):
-            return Color(red=(self._red * rhs._red),
-                         green=(self._green * rhs._green),
-                         blue=(self._blue * rhs._blue))
-
-        # If we are not multiplying by another color, then fall back on scalar
-        # multiplication of individual color components
-        return Color(red=self._red * rhs,
-                     green=self._green * rhs,
-                     blue=self._blue * rhs)
+        return Color(red=(self.red * rhs.red),
+                     green=(self.green * rhs.green),
+                     blue=(self.blue * rhs.blue))
 
     def __add__(self, rhs):
-        return Color(red=self._red + rhs._red,
-                     green=self._green + rhs._green,
-                     blue=self._blue + rhs._blue)
+        return Color(red=self.red + rhs.red,
+                     green=self.green + rhs.green,
+                     blue=self.blue + rhs.blue)
 
     def __sub__(self, rhs):
-        return Color(red=self._red - rhs._red,
-                     green=self._green - rhs._green,
-                     blue=self._blue - rhs._blue)
+        return Color(red=self.red - rhs.red,
+                     green=self.green - rhs.green,
+                     blue=self.blue - rhs.blue)
 
     def __str__(self):
-        return "{} {} {}".format(self._clamp_color_value(self._red),
-                                 self._clamp_color_value(self._green),
-                                 self._clamp_color_value(self._blue))
+        return "{} {} {}".format(self._clamp_color_value(self.red),
+                                 self._clamp_color_value(self.green),
+                                 self._clamp_color_value(self.blue))

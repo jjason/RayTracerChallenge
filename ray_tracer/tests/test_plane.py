@@ -33,14 +33,14 @@ class TestPlane(unittest.TestCase):
         i = self._plane.intersect(ray=r)
         self.assertEqual(i.count, 1)
         self.assertTrue(Utilities.equal(i[0].time, 1))
-        self.assertIs(i[0].the_object, self._plane)
+        self.assertIs(i[0].shape, self._plane)
 
     def test_intersect_with_ray_from_below(self):
         r = Ray(origin=Point(x=0, y=-1, z=0), direction=Vector(x=0, y=1, z=0))
         i = self._plane.intersect(ray=r)
         self.assertEqual(i.count, 1)
         self.assertTrue(Utilities.equal(i[0].time, 1))
-        self.assertIs(i[0].the_object, self._plane)
+        self.assertIs(i[0].shape, self._plane)
 
 
 if __name__ == '__main__':

@@ -42,11 +42,12 @@ class World:
         # the point to prevent false positives.
         is_shadowed = self.is_shadowed(computations.over_position)
 
-        return computations.the_object.material.lighting(light=self._light_source,
-                                                         position=computations.position,
-                                                         eye=computations.eye,
-                                                         normal=computations.normal,
-                                                         in_shadow=is_shadowed)
+        return computations.shape.material.lighting(shape=computations.shape,
+                                                    light=self._light_source,
+                                                    position=computations.position,
+                                                    eye=computations.eye,
+                                                    normal=computations.normal,
+                                                    in_shadow=is_shadowed)
 
     def color_at(self, ray):
         # Determine the intersections for the ray and the objects in the world

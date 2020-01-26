@@ -1,10 +1,7 @@
 import math
 
 from color import Color
-from lights import PointLight
-from point import Point
 from util import Utilities
-from vector import Vector
 
 
 class Material:
@@ -14,12 +11,12 @@ class Material:
                  diffuse=0.9,
                  specular=0.9,
                  shininess=200.0):
-        self._color = Color(red=color.red, green=color.green, blue=color.blue) \
-            if color else Color(red=1, green=1, blue=1)
-        self._ambient = float(ambient)
-        self._diffuse = float(diffuse)
-        self._specular = float(specular)
-        self._shininess = float(shininess)
+        self.color = color
+        self.ambient = float(ambient)
+        self.diffuse = float(diffuse)
+        self.specular = float(specular)
+        self.shininess = float(shininess)
+        self.pattern = None
 
     @property
     def color(self):
@@ -27,7 +24,8 @@ class Material:
 
     @color.setter
     def color(self, value):
-        self._color = Color(red=value.red, green=value.green, blue=value.blue)
+        self._color = Color(red=value.red, green=value.green, blue=value.blue) \
+            if value else Color(red=1, green=1, blue=1)
 
     @property
     def ambient(self):
@@ -35,8 +33,7 @@ class Material:
 
     @ambient.setter
     def ambient(self, value):
-        if value >= 0.0:
-            self._ambient = value
+        self._ambient = value if value >= 0.0 else 0.0
 
     @property
     def diffuse(self):
@@ -44,8 +41,7 @@ class Material:
 
     @diffuse.setter
     def diffuse(self, value):
-        if value >= 0.0:
-            self._diffuse = value
+        self._diffuse = value if value >= 0.0 else 0.0
 
     @property
     def specular(self):
@@ -53,8 +49,7 @@ class Material:
 
     @specular.setter
     def specular(self, value):
-        if value >= 0.0:
-            self._specular = value
+        self._specular = value if value >= 0.0 else 0.0
 
     @property
     def shininess(self):
@@ -62,30 +57,45 @@ class Material:
 
     @shininess.setter
     def shininess(self, value):
-        if value >= 0.0:
-            self._shininess = value
+        self._shininess = value if value >= 0.0 else 0.0
+
+    @property
+    def pattern(self):
+        return self._pattern
+
+    @pattern.setter
+    def pattern(self, value):
+        self._pattern = value
 
     def __eq__(self, other):
         return \
-            self._color == other._color and \
-            Utilities.equal(self._ambient, other._ambient) and \
-            Utilities.equal(self._diffuse, other._diffuse) and \
-            Utilities.equal(self._specular, other._specular) and \
-            Utilities.equal(self._shininess, other._shininess)
+            self.color == other.color and \
+            Utilities.equal(self.ambient, other.ambient) and \
+            Utilities.equal(self.diffuse, other.diffuse) and \
+            Utilities.equal(self.specular, other.specular) and \
+            Utilities.equal(self.shininess, other.shininess)
 
     def __ne__(self, other):
         return not self == other
 
-    def lighting(self, light, position, eye, normal, in_shadow):
+    def lighting(self, shape, light, position, eye, normal, in_shadow):
+        # If the material has a pattern, then figure out the color of the
+        # pattern at the position.  Otherwise, use the material's default
+        # color
+        if self.pattern is not None:
+            color = self.pattern.shape_color_at(shape=shape, position=position)
+        else:
+            color = self.color
+
         # Combine the material's color with the intensity/color of the light
-        effective_color = self._color * light.intensity
+        effective_color = color * light.intensity
 
         # Determine the direction to the light source
         light_vector = (light.position - position).normalize()
 
         # Compute the ambient contribution to the final color, which is not
         # affected by the angle of the light
-        ambient = effective_color * self._ambient
+        ambient = effective_color * self.ambient
 
         # Take the dot product of the light vector and the normal vector.  This
         # is the cosine of the angle between the two vectors.  A number less
@@ -97,7 +107,7 @@ class Material:
             diffuse = specular = Color(red=0, green=0, blue=0)
         else:
             # Compute the diffuse contribution to the final color
-            diffuse = effective_color * self._diffuse * light_dot_normal
+            diffuse = effective_color * self.diffuse * light_dot_normal
 
             # Take the dot product of the reflection vector (computed from the
             # light vector and the normal vector) and the eye vector.  This is
@@ -111,7 +121,7 @@ class Material:
                 specular = Color(red=0, green=0, blue=0)
             else:
                 # Contribute the specular contribution to the final color
-                factor = math.pow(reflect_dot_eye, self._shininess)
-                specular = light.intensity * self._specular * factor
+                factor = math.pow(reflect_dot_eye, self.shininess)
+                specular = light.intensity * self.specular * factor
 
         return ambient if in_shadow else ambient + diffuse + specular

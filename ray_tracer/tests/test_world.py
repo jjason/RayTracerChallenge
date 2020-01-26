@@ -49,7 +49,7 @@ class TestWorld(unittest.TestCase):
     def test_shade_hit_outside(self):
         r = Ray(origin=Point(x=0, y=0, z=-5), direction=Vector(x=0, y=0, z=1))
         s = self._default_world.objects[0]
-        i = Intersection(time=4, the_object=s)
+        i = Intersection(time=4, shape=s)
         c = i.prepare_computations(ray=r)
         co = self._default_world.shade_hit(c)
         self.assertEqual(co, Color(red=0.38066, green=0.47583, blue=0.2855))
@@ -63,7 +63,7 @@ class TestWorld(unittest.TestCase):
                                                                       blue=1))
         r = Ray(origin=Point(x=0, y=0, z=0), direction=Vector(x=0, y=0, z=1))
         s = self._default_world.objects[1]
-        i = Intersection(time=0.5, the_object=s)
+        i = Intersection(time=0.5, shape=s)
         c = i.prepare_computations(ray=r)
         co = self._default_world.shade_hit(c)
         self.assertEqual(co, Color(red=0.90498, green=0.90498, blue=0.90498))
@@ -75,7 +75,7 @@ class TestWorld(unittest.TestCase):
                        intensity=Color(red=1, green=1, blue=1))
         w = World(objects=[s1, s2], light_source=l)
         r = Ray(origin=Point(x=0, y=0, z=5), direction=Vector(x=0, y=0, z=1))
-        i = Intersection(time=4, the_object=s2)
+        i = Intersection(time=4, shape=s2)
         c = i.prepare_computations(ray=r)
         co = w.shade_hit(computations=c)
         self.assertEqual(co, Color(red=0.1, green=0.1, blue=0.1))

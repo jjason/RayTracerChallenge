@@ -44,7 +44,7 @@ class Plane(Shape):
         # the y direction until it gets to y=0.  Simply divide the ray origin's
         # y value by the ray direction's y value and negate
         time = -ray.origin.y / ray.direction.y
-        return Intersections(Intersection(time=time, the_object=self))
+        return Intersections(Intersection(time=time, shape=self))
 
     def _normal_at(self, position):
         """
